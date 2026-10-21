@@ -4,6 +4,7 @@ import { Sidebar } from "./components/Sidebar";
 import type { Page } from "./components/Sidebar";
 import { useQueries, useFollowUps, useTodayAppointments } from "../hooks/usePRAData";
 import { Topbar } from "./components/Topbar";
+import { BillingBanner } from "./components/BillingBanner";
 import { Dashboard } from "./components/pages/Dashboard";
 import { Appointments } from "./components/pages/Appointments";
 import { Queue } from "./components/pages/Queue";
@@ -124,6 +125,7 @@ function AppShell() {
       />
       <div className="lg:ml-60 ml-0 flex flex-col min-h-screen">
         <Topbar activePage={activePage} />
+        <BillingBanner />
         <main className="flex-1 overflow-y-auto">
           {renderPage()}
         </main>
