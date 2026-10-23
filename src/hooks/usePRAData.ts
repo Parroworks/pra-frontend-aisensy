@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { api, type DashboardStats, type QueueStatus, type Appointment, type Patient, type Prescription, type FollowUp, type Query, type Review } from "../lib/api";
-import { subscribeToQueue, subscribeToPatients, subscribeToQueries } from "../lib/supabase";
+import { subscribeToQueue, subscribeToPatients, subscribeToQueries } from "../lib/realtime";
 import { useAuth } from "../context/AuthContext";
 
 function today() {
@@ -68,8 +68,8 @@ export function useQueue(doctorIdOverride?: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     setError(null);
     try {
       const result = await api.queue.status(doctorId, today());
@@ -77,7 +77,7 @@ export function useQueue(doctorIdOverride?: string) {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [doctorId]);
 
@@ -155,8 +155,8 @@ export function usePatients(search?: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     setError(null);
     try {
       const result = await api.patients.list(doctorId, search);
@@ -164,7 +164,7 @@ export function usePatients(search?: string) {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [doctorId, search]);
 
@@ -212,8 +212,8 @@ export function useQueries() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     setError(null);
     try {
       const result = await api.queries.list(doctorId);
@@ -221,7 +221,7 @@ export function useQueries() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [doctorId]);
 

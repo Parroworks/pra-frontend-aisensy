@@ -183,7 +183,7 @@ export function Patients() {
         {error && (
           <div className="flex items-center gap-3 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">
             <span className="text-[13px] text-rose-700 flex-1">Failed to load patients.</span>
-            <button onClick={refetch} className="flex items-center gap-1 text-[12px] font-semibold text-rose-600">
+            <button onClick={() => refetch()} className="flex items-center gap-1 text-[12px] font-semibold text-rose-600">
               <RefreshCw size={13} /> Retry
             </button>
           </div>
