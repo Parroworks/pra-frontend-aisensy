@@ -5,6 +5,9 @@ import { PatientRegistration } from "./app/components/pages/PatientRegistration.
 import { NewAppointment } from "./app/components/pages/NewAppointment.tsx";
 import "./styles/index.css";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import { installAuthFetch } from "./lib/authFetch.ts";
+
+installAuthFetch();   // send the login token with every API call
 
 const pathname = window.location.pathname;
 
