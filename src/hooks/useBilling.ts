@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-const BASE_URL = (import.meta.env.VITE_API_URL as string) || "https://web-production-a0717.up.railway.app";
+const BASE_URL = (import.meta.env.VITE_API_URL as string);
 const TOKEN_KEY = "pra_auth_token";
 
 export type PlanId = "starter" | "growth" | "pro";

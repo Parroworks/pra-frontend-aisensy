@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-const API_BASE = import.meta.env.VITE_API_URL || "https://web-production-a0717.up.railway.app";
+const API_BASE = (import.meta.env.VITE_API_URL as string);
 const TOKEN_KEY = "pra_auth_token";
 
 export type StaffRole = "doctor" | "receptionist" | "pharmacist" | "lab" | "admin";

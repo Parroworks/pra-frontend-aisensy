@@ -8,7 +8,7 @@ import type { ClinicScheduleResponse, ClinicScheduleDay, ClinicScheduleSession, 
 import { api } from "../../../lib/api";
 import { useAuth } from "../../../context/AuthContext";
 
-const API_BASE = import.meta.env.VITE_API_URL || "https://web-production-e5f38.up.railway.app";
+const API_BASE = (import.meta.env.VITE_API_URL as string);
 
 type ConfigRow = {
   config_key: string;
