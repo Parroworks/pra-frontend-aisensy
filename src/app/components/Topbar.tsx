@@ -1,7 +1,8 @@
-import { Bell, Search, Calendar, LogOut, Clock } from "lucide-react";
+import { Bell, Search, Calendar, LogOut, Clock, KeyRound } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { Page } from "./Sidebar";
 import { useAuth } from "../../context/AuthContext";
+import { ChangePinModal } from "./ChangePinModal";
 
 const pageTitles: Record<Page, string> = {
   dashboard: "Overview",
@@ -28,6 +29,7 @@ const pageTitles: Record<Page, string> = {
 export function Topbar({ activePage }: { activePage: Page }) {
   const { user, logout } = useAuth();
   const [now, setNow] = useState(new Date());
+  const [pinOpen, setPinOpen] = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000);
@@ -95,6 +97,13 @@ export function Topbar({ activePage }: { activePage: Page }) {
             <p className="text-[11px] text-slate-400">{roleLabel}</p>
           </div>
           <button
+            onClick={() => setPinOpen(true)}
+            title="Change PIN"
+            className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            <KeyRound size={15} />
+          </button>
+          <button
             onClick={logout}
             title="Sign out"
             className="p-2 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
@@ -104,6 +113,7 @@ export function Topbar({ activePage }: { activePage: Page }) {
         </div>
       )}
 
+      {pinOpen && <ChangePinModal onClose={() => setPinOpen(false)} />}
     </header>
   );
 }

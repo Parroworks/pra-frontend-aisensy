@@ -20,6 +20,7 @@ interface AuthContextValue {
   loading: boolean;
   login: (username: string, pin: string) => Promise<string | null>; // returns error string or null
   logout: () => void;
+  changePin: (currentPin: string, newPin: string) => Promise<string | null>; // returns error string or null
   // legacy helpers — keep so existing pages don't break
   doctorId: string;
   doctorName: string;
@@ -33,6 +34,7 @@ const AuthContext = createContext<AuthContextValue>({
   loading: true,
   login: async () => "Not initialised",
   logout: () => {},
+  changePin: async () => "Not initialised",
   doctorId: FALLBACK_DOCTOR_ID,
   doctorName: "Dr. Kumar",
   clinicName: "Dr. Kumar Child Care Clinic",
@@ -83,13 +85,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  const changePin = async (currentPin: string, newPin: string): Promise<string | null> => {
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/change-pin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY) ?? ""}` },
+        body: JSON.stringify({ current_pin: currentPin, new_pin: newPin }),
+      });
+      if (res.ok) return null;
+      const err = await res.json().catch(() => ({}));
+      return typeof err.detail === "string" ? err.detail : "Could not change the PIN";
+    } catch {
+      return "Network error — please try again";
+    }
+  };
+
   // Legacy helpers: pages that read doctorId/doctorName still work
   const doctorId = user?.doctorId || FALLBACK_DOCTOR_ID;
   const doctorName = user?.role === "doctor" ? user.name : "Dr. Kumar";
   const clinicName = "TrueCare Family Clinic";
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, doctorId, doctorName, clinicName }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, changePin, doctorId, doctorName, clinicName }}>
       {children}
     </AuthContext.Provider>
   );
